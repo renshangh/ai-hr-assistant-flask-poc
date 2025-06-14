@@ -1,0 +1,10 @@
+Flask
+langchain
+openai
+azure-search-documents
+azure-ai-contentsafety
+azure-identity
+python-dotenv
+tiktoken
+sentence-transformers
+faiss-cpu
