@@ -1,4 +1,4 @@
-cat > README.md << 'EOF'
+
 # AI HR Assistant - Flask POC with Custom Embeddings
 
 This is a Proof-of-Concept (POC) for an AI-powered HR virtual assistant using:
