@@ -4,7 +4,7 @@ from langchain.chat_models import AzureChatOpenAI
 from azure.ai.contentsafety import ContentSafetyClient
 from azure.ai.contentsafety.models import AnalyzeTextOptions
 from azure.core.credentials import AzureKeyCredential as CSKeyCredential
-from embeddings import retrieve_relevant_docs
+from shared.embeddings import retrieve_relevant_docs
 
 load_dotenv()
 
@@ -21,10 +21,10 @@ llm = AzureChatOpenAI(
     openai_api_version="2024-02-15-preview"
 )
 
-cs_client = ContentSafetyClient(
-    endpoint=AZURE_CONTENT_SAFETY_ENDPOINT,
-    credential=CSKeyCredential(AZURE_CONTENT_SAFETY_KEY)
-)
+# cs_client = ContentSafetyClient(
+#     endpoint=AZURE_CONTENT_SAFETY_ENDPOINT,
+#     credential=CSKeyCredential(AZURE_CONTENT_SAFETY_KEY)
+# )
 
 def get_hr_answer(question):
     retrieved_docs = retrieve_relevant_docs(question, k=3)
@@ -45,16 +45,18 @@ def get_hr_answer(question):
         text=answer,
         categories=["Hate", "Violence", "SelfHarm", "Sexual"]
     )
-    safety = cs_client.analyze_text(options)
+
+    # safety = cs_client.analyze_text(options)
 
 
-    # Check if any category has a severity of 3 or higher
-    for category in safety.categories_analysis:
-        print(f"Category: {category.category}, Severity: {category.severity}") 
+    
+# # Check if any category has a severity of 3 or higher
+#     for category in safety.categories_analysis:
+#         print(f'Category: {category.category}, Severity: {category.severity}') 
 
-    for category in safety.categories_analysis:
-        if category.severity >= 3:
-            answer = "[Content flagged for safety review.]"
-            break
+#     for category in safety.categories_analysis:
+#         if category.severity >= 3:
+#             answer = '[Content flagged for safety review.]'
+#             break 
 
     return answer

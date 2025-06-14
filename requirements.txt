@@ -9,3 +9,10 @@ tiktoken
 sentence-transformers
 faiss-cpu
 langchain_community
+azure-functions
+faiss-cpu
+numpy
+sentence_transformers
+
+
+
