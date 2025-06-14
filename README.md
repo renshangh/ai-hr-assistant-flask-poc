@@ -40,6 +40,7 @@ ai-hr-assistant-flask-poc/
 ├── Dockerfile               # Docker build
 ├── docker-compose.yml       # Local compose file
 └── README.md                # This file
+```
 
 ⚙️ Prerequisites
 Python 3.10+ (for local dev)
