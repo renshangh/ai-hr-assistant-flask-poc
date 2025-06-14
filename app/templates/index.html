@@ -1,22 +1,97 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>HR Virtual Assistant</title>
+    <meta charset="UTF-8">
+    <title>AI HR Assistant Chat</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 50px; }
-        textarea { width: 100%; height: 100px; }
-        .answer { background: #f2f2f2; padding: 10px; margin-top: 20px; }
+        body { font-family: Arial, sans-serif; background: #f7f7f7; }
+        #chat-container { max-width: 600px; margin: 60px auto 40px auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #ccc; padding: 24px; }
+        .chat-bubble { margin: 12px 0; padding: 12px 18px; border-radius: 18px; max-width: 80%; }
+        .user { background: #e0f7fa; align-self: flex-end; margin-left: auto; }
+        .assistant { background: #f1f8e9; align-self: flex-start; margin-right: auto; }
+        #chat-log { display: flex; flex-direction: column; min-height: 300px; }
+        #question-form { display: flex; margin-top: 16px; }
+        #question-input { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid #ccc; }
+        #send-btn { padding: 10px 18px; border: none; background: #1976d2; color: #fff; border-radius: 8px; margin-left: 8px; cursor: pointer; }
+        #send-btn:disabled { background: #90caf9; cursor: not-allowed; }
+        #fixed-title {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            background: #1976d2;
+            color: #fff;
+            text-align: center;
+            font-size: 2rem;
+            font-weight: bold;
+            padding: 18px 0 14px 0;
+            z-index: 1000;
+            box-shadow: 0 2px 8px #bbb;
+            letter-spacing: 1px;
+        }
     </style>
 </head>
 <body>
-    <h1>HR Virtual Assistant</h1>
-    <form method="post">
-        <textarea name="question" placeholder="Ask your HR question here..."></textarea><br><br>
-        <input type="submit" value="Ask">
-    </form>
+    <div id="fixed-title">AI HR Assistant</div>
+    <div id="chat-container">
+        <div id="chat-log"></div>
+        <form id="question-form" autocomplete="off">
+            <input type="text" id="question-input" placeholder="Type your HR question..." required autofocus>
+            <button type="submit" id="send-btn">Send</button>
+        </form>
+        {% if answer %}
+            <div id="answer" style="display:none;">{{ answer }}</div>
+        {% endif %}
+    </div>
+    <script>
+        const chatLog = document.getElementById('chat-log');
+        const questionForm = document.getElementById('question-form');
+        const questionInput = document.getElementById('question-input');
+        const sendBtn = document.getElementById('send-btn');
 
-    {% if answer %}
-        <div class="answer"><strong>Answer:</strong> {{ answer }}</div>
-    {% endif %}
+        function appendMessage(text, sender) {
+            const bubble = document.createElement('div');
+            bubble.className = 'chat-bubble ' + sender;
+            bubble.textContent = text;
+            chatLog.appendChild(bubble);
+            chatLog.scrollTop = chatLog.scrollHeight;
+        }
+
+        questionForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const question = questionInput.value.trim();
+            if (!question) return;
+            appendMessage(question, 'user');
+            questionInput.value = '';
+            sendBtn.disabled = true;
+
+            // Send question to backend
+            try {
+                const response = await fetch('/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({ question })
+                });
+                const html = await response.text();
+                // Extract answer from returned HTML (assuming answer is in <div id="answer">...</div>)
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const answerDiv = doc.getElementById('answer');
+                const answer = answerDiv ? answerDiv.textContent : 'Sorry, no answer received.';
+                appendMessage(answer, 'assistant');
+            } catch (err) {
+                appendMessage('Error: Could not get answer from server.', 'assistant');
+            }
+            sendBtn.disabled = false;
+        });
+
+        // Optional: Show initial answer if present (for first page load)
+        window.addEventListener('DOMContentLoaded', () => {
+            const answerDiv = document.getElementById('answer');
+            if (answerDiv && answerDiv.textContent.trim()) {
+                appendMessage(answerDiv.textContent, 'assistant');
+            }
+        });
+    </script>
 </body>
 </html>
