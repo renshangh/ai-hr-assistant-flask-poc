@@ -115,6 +115,16 @@
             chatLog.scrollTop = chatLog.scrollHeight;
         }
 
+        // Show greeting if chat is brand new
+        window.addEventListener('DOMContentLoaded', () => {
+            const answerDiv = document.getElementById('answer');
+            if (answerDiv && answerDiv.textContent.trim()) {
+                appendMessage(answerDiv.textContent, 'assistant');
+            } else {
+                appendMessage("Hello! I'm your AI HR Assistant. How can I help you today?", 'assistant');
+            }
+        });
+
         questionForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             const question = questionInput.value.trim();
@@ -142,14 +152,5 @@
             }
             sendBtn.disabled = false;
         });
-
-        // Show initial answer if present (for first page load)
-        window.addEventListener('DOMContentLoaded', () => {
-            const answerDiv = document.getElementById('answer');
-            if (answerDiv && answerDiv.textContent.trim()) {
-                appendMessage(answerDiv.textContent, 'assistant');
-            }
-        });
     </script>
 </body>
-</html>
