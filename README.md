@@ -91,13 +91,21 @@ http://localhost:5000
 ✅ Start asking HR questions!
 
 🧠 How It Works
+
 1️⃣ User enters HR question via web UI
+
 2️⃣ The question is embedded using your custom embedding model
+
 3️⃣ FAISS searches for top relevant documents locally
+
 4️⃣ LangChain injects context + question to Azure OpenAI LLM
+
 5️⃣ LLM generates response
+
 6️⃣ Azure Content Safety checks the response for unsafe content
+
 7️⃣ Answer displayed to user
+
 
 🚀 Next Steps
 
