@@ -57,17 +57,13 @@ HuggingFace model access (for embedding model)
 
 🚀 Quickstart
 1️⃣ Clone Repository
-bash
-Copy
-Edit
+```bash
 git clone <your-repo-url>
 cd ai-hr-assistant-flask-poc
+```
 2️⃣ Setup Environment Variables
 Create a .env file in the root directory:
-
-bash
-Copy
-Edit
+```bash
 AZURE_OPENAI_ENDPOINT=https://<your-openai-endpoint>.openai.azure.com/
 AZURE_OPENAI_KEY=<your-openai-key>
 AZURE_OPENAI_DEPLOYMENT=gpt-35-turbo
@@ -75,26 +71,22 @@ AZURE_OPENAI_DEPLOYMENT=gpt-35-turbo
 AZURE_CONTENT_SAFETY_ENDPOINT=https://<your-contentsafety-endpoint>.cognitiveservices.azure.com/
 AZURE_CONTENT_SAFETY_KEY=<your-contentsafety-key>
 ℹ Note: We are using FAISS locally for vector search in this POC, so Azure Cognitive Search is not required for now.
-
+```
 3️⃣ Build & Run Locally with Docker
 Using plain Docker:
-bash
-Copy
-Edit
+```bash
 docker build -t hr-virtual-assistant .
 docker run -p 5000:5000 --env-file .env hr-virtual-assistant
+```
 OR use docker-compose:
-bash
-Copy
-Edit
+```bash
 docker-compose up
+```
 4️⃣ Open Web Interface
 Open your browser and navigate to:
-
-arduino
-Copy
-Edit
+```bash
 http://localhost:5000
+```
 ✅ Start asking HR questions!
 
 🧠 How It Works
