@@ -70,8 +70,9 @@ AZURE_OPENAI_DEPLOYMENT=gpt-35-turbo
 
 AZURE_CONTENT_SAFETY_ENDPOINT=https://<your-contentsafety-endpoint>.cognitiveservices.azure.com/
 AZURE_CONTENT_SAFETY_KEY=<your-contentsafety-key>
-ℹ Note: We are using FAISS locally for vector search in this POC, so Azure Cognitive Search is not required for now.
 ```
+ℹ Note: We are using FAISS locally for vector search in this POC, so Azure Cognitive Search is not required for now.
+
 3️⃣ Build & Run Locally with Docker
 Using plain Docker:
 ```bash
@@ -99,6 +100,7 @@ http://localhost:5000
 7️⃣ Answer displayed to user
 
 🚀 Next Steps
+
 ✅ Add real HR documents into app/embeddings.py for better responses
 
 ✅ Swap FAISS to Azure Cognitive Search for full enterprise deployment
