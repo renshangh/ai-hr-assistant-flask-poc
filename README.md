@@ -66,7 +66,7 @@ Create a .env file in the root directory:
 ```bash
 AZURE_OPENAI_ENDPOINT=https://<your-openai-endpoint>.openai.azure.com/
 AZURE_OPENAI_KEY=<your-openai-key>
-AZURE_OPENAI_DEPLOYMENT=gpt-35-turbo
+AZURE_OPENAI_DEPLOYMENT=gpt-4o-mini
 
 AZURE_CONTENT_SAFETY_ENDPOINT=https://<your-contentsafety-endpoint>.cognitiveservices.azure.com/
 AZURE_CONTENT_SAFETY_KEY=<your-contentsafety-key>

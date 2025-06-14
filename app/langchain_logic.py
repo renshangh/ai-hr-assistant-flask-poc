@@ -2,6 +2,7 @@ import os
 from dotenv import load_dotenv
 from langchain.chat_models import AzureChatOpenAI
 from azure.ai.contentsafety import ContentSafetyClient
+from azure.ai.contentsafety.models import AnalyzeTextOptions
 from azure.core.credentials import AzureKeyCredential as CSKeyCredential
 from embeddings import retrieve_relevant_docs
 
@@ -40,7 +41,17 @@ def get_hr_answer(question):
     response = llm.invoke(prompt)
     answer = response.content
 
-    safety = cs_client.analyze_text(input=answer, categories=["Hate", "Violence", "SelfHarm", "Sexual"])
+    options = AnalyzeTextOptions(
+        text=answer,
+        categories=["Hate", "Violence", "SelfHarm", "Sexual"]
+    )
+    safety = cs_client.analyze_text(options)
+
+
+    # Check if any category has a severity of 3 or higher
+    for category in safety.categories_analysis:
+        print(f"Category: {category.category}, Severity: {category.severity}") 
+
     for category in safety.categories_analysis:
         if category.severity >= 3:
             answer = "[Content flagged for safety review.]"
