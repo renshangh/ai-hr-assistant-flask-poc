@@ -42,7 +42,7 @@ ai-hr-assistant-flask-poc/
 └── README.md                # This file
 ```
 
-⚙️ Prerequisites
+## ⚙️ Prerequisites
 Python 3.10+ (for local dev)
 
 Docker (for containerization)
@@ -55,7 +55,7 @@ Azure Content Safety resource
 
 HuggingFace model access (for embedding model)
 
-🚀 Quickstart
+## 🚀 Quickstart
 1️⃣ Clone Repository
 ```bash
 git clone <your-repo-url>
@@ -90,7 +90,7 @@ http://localhost:5000
 ```
 ✅ Start asking HR questions!
 
-🧠 How It Works
+## 🧠 How It Works
 
 1️⃣ User enters HR question via web UI
 
@@ -107,7 +107,7 @@ http://localhost:5000
 7️⃣ Answer displayed to user
 
 
-🚀 Next Steps
+## 🚀 Next Steps
 
 ✅ Add real HR documents into app/embeddings.py for better responses
 
@@ -117,11 +117,11 @@ http://localhost:5000
 
 ✅ Add CI/CD pipeline for automated deployment
 
-🔒 Security Notes
+## 🔒 Security Notes
 Make sure secrets in .env are not committed into your version control
 
 In production, move secrets to Azure Key Vault or container secrets
 
-📞 Support
+## 📞 Support
 Contact AI Platform Engineering for support, architecture review, or production upgrade.
 
