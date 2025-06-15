@@ -1,10 +1,10 @@
 import os
 from dotenv import load_dotenv
-from langchain.chat_models import AzureChatOpenAI
-from azure.ai.contentsafety import ContentSafetyClient
-from azure.ai.contentsafety.models import AnalyzeTextOptions
+from langchain_community.chat_models import AzureChatOpenAI
+#from azure.ai.contentsafety import ContentSafetyClient
+#from azure.ai.contentsafety.models import AnalyzeTextOptions
 from azure.core.credentials import AzureKeyCredential as CSKeyCredential
-from .embeddings import retrieve_relevant_docs
+from embeddings import retrieve_relevant_docs
 
 load_dotenv()
 
@@ -41,10 +41,10 @@ def get_hr_answer(question):
     response = llm.invoke(prompt)
     answer = response.content
 
-    options = AnalyzeTextOptions(
-        text=answer,
-        categories=["Hate", "Violence", "SelfHarm", "Sexual"]
-    )
+    # options = AnalyzeTextOptions(
+    #     text=answer,
+    #     categories=["Hate", "Violence", "SelfHarm", "Sexual"]
+    #)
 
     # safety = cs_client.analyze_text(options)
 
