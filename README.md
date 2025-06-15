@@ -23,105 +23,104 @@ This is a Proof-of-Concept (POC) for an AI-powered HR virtual assistant using:
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
-```bash
+```
 ai-hr-assistant-flask-poc/
 │
-├── app/
-│   ├── main.py              # Flask Web App
-│   ├── langchain_logic.py   # RAG Pipeline Orchestration
-│   ├── embeddings.py        # Embedding + Vector Search Logic
-│   └── templates/
-│       └── index.html       # Simple Web UI
-│
-├── .env                     # Environment variables (secrets)
-├── requirements.txt         # Python dependencies
-├── Dockerfile               # Docker build
-├── docker-compose.yml       # Local compose file
-└── README.md                # This file
+├── frontend/           # Static web app (UI)
+├── ask/                # Azure Function (API backend)
+│   ├── __init__.py
+│   └── function.json
+├── langchain_logic.py  # AI logic module
+├── requirements.txt    # Python dependencies
+└── README.md
 ```
 
-## ⚙️ Prerequisites
-Python 3.10+ (for local dev)
+---
 
-Docker (for containerization)
+## Prerequisites
 
-Azure Account:
+- Python 3.9+
+- Node.js 18.x (for Azure Functions Core Tools compatibility)
+- [Azure Functions Core Tools](https://docs.microsoft.com/azure/azure-functions/functions-run-local)
+- [Azure Static Web Apps CLI](https://learn.microsoft.com/azure/static-web-apps/cli) (`npm install -g @azure/static-web-apps-cli`)
+- [GitHub account](https://github.com/)
 
-Azure OpenAI resource
+---
 
-Azure Content Safety resource
+## Local Development
 
-HuggingFace model access (for embedding model)
+### 1. Clone the repo and install dependencies
 
-## 🚀 Quickstart
-1️⃣ Clone Repository
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/<your-username>/<your-repo>.git
 cd ai-hr-assistant-flask-poc
+python3.9 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
 ```
-2️⃣ Setup Environment Variables
-Create a .env file in the root directory:
+
+### 2. Test the Azure Function locally
+
 ```bash
-AZURE_OPENAI_ENDPOINT=https://<your-openai-endpoint>.openai.azure.com/
-AZURE_OPENAI_KEY=<your-openai-key>
-AZURE_OPENAI_DEPLOYMENT=gpt-4o-mini
-
-AZURE_CONTENT_SAFETY_ENDPOINT=https://<your-contentsafety-endpoint>.cognitiveservices.azure.com/
-AZURE_CONTENT_SAFETY_KEY=<your-contentsafety-key>
+func start
 ```
-ℹ Note: We are using FAISS locally for vector search in this POC, so Azure Cognitive Search is not required for now.
-
-3️⃣ Build & Run Locally with Docker
-Using plain Docker:
+Test with:
 ```bash
-docker build -t hr-virtual-assistant .
-docker run -p 5000:5000 --env-file .env hr-virtual-assistant
+curl -X POST http://localhost:7071/api/ask -H "Content-Type: application/json" -d '{"question": "What is the leave policy?"}'
 ```
-OR use docker-compose:
+
+### 3. Test the frontend locally
+
 ```bash
-docker-compose up
+cd frontend
+python3 -m http.server 5500
 ```
-4️⃣ Open Web Interface
-Open your browser and navigate to:
+Visit [http://localhost:5500](http://localhost:5500).
+
+### 4. Full-stack local test with SWA CLI
+
+From the project root:
 ```bash
-http://localhost:5000
+swa start frontend --api-location ask
 ```
-✅ Start asking HR questions!
+Visit [http://localhost:4280](http://localhost:4280).
 
-## 🧠 How It Works
+---
 
-1️⃣ User enters HR question via web UI
+## Deployment to Azure
 
-2️⃣ The question is embedded using your custom embedding model
+1. **Push your code to GitHub.**
+2. **Create a new Azure Static Web App** in the [Azure Portal](https://portal.azure.com/):
+   - Set **App location** to `frontend`
+   - Set **API location** to `ask`
+3. **Azure will create a GitHub Actions workflow** for CI/CD.
+4. **Monitor deployment** in the GitHub Actions tab.
+5. **Access your app** via the provided Azure Static Web App URL.
 
-3️⃣ FAISS searches for top relevant documents locally
+---
 
-4️⃣ LangChain injects context + question to Azure OpenAI LLM
+## Troubleshooting
 
-5️⃣ LLM generates response
+- **API not working?**  
+  - Check folder structure and `function.json` in `ask/`
+  - Review GitHub Actions logs for deployment errors
+  - Ensure Node.js version is 18.x for local development
 
-6️⃣ Azure Content Safety checks the response for unsafe content
+- **Frontend not connecting to API?**  
+  - Make sure API is deployed and accessible at `/api/ask`
+  - Check browser console/network tab for errors
 
-7️⃣ Answer displayed to user
+---
 
+## License
 
-## 🚀 Next Steps
+MIT
 
-✅ Add real HR documents into app/embeddings.py for better responses
+---
 
-✅ Swap FAISS to Azure Cognitive Search for full enterprise deployment
+## Credits
 
-✅ Deploy Flask container to Azure Container Apps
-
-✅ Add CI/CD pipeline for automated deployment
-
-## 🔒 Security Notes
-Make sure secrets in .env are not committed into your version control
-
-In production, move secrets to Azure Key Vault or container secrets
-
-## 📞 Support
-Contact AI Platform Engineering for support, architecture review, or production upgrade.
-
+- [LangChain](https://github.com/langchain-ai/langchain)
+- [FAISS](https://github.com/facebookresearch/faiss)
