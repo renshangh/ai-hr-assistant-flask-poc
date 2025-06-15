@@ -1,126 +1,117 @@
-
-# AI HR Assistant - Flask POC with Custom Embeddings
-
-This is a Proof-of-Concept (POC) for an AI-powered HR virtual assistant using:
-
-- ✅ Flask (Web UI)
-- ✅ LangChain (orchestration)
-- ✅ Custom Embedding Model: `renshanhf/weighted-triplet-finetuned-model`
-- ✅ FAISS (local vector search for POC)
-- ✅ Azure OpenAI GPT-35 (LLM)
-- ✅ Azure AI Content Safety (guardrails)
-
----
-
-## 📦 Features
-
-- Fully containerized Flask web app
-- Retrieval-Augmented Generation (RAG) pipeline
-- Custom embeddings with your fine-tuned model
-- Guardrails to ensure safe answers
-- Runs locally or inside Docker
-- Portable design for easy production upgrade
-
----
+# AI Assistant - Azure Deployment
 
 ## Project Structure
 
 ```
 ai-hr-assistant-flask-poc/
 │
-├── frontend/           # Static web app (UI)
-├── ask/                # Azure Function (API backend)
-│   ├── __init__.py
-│   └── function.json
-├── langchain_logic.py  # AI logic module
-├── requirements.txt    # Python dependencies
-└── README.md
+├── api/
+│   └── ask/
+│       ├── main.py                # FastAPI app entrypoint
+│       ├── langchain_logic.py     # Business logic
+│       ├── requirements.txt       # Python dependencies
+│       ├── Dockerfile             # For containerizing the backend
+│       └── .env                   # (Not committed) API keys and secrets
+│
+└── frontend/
+    ├── index.html                 # Main frontend entrypoint
+    ├── ...                        # Other frontend assets and code
 ```
-
----
-
-## Prerequisites
-
-- Python 3.9+
-- Node.js 18.x (for Azure Functions Core Tools compatibility)
-- [Azure Functions Core Tools](https://docs.microsoft.com/azure/azure-functions/functions-run-local)
-- [Azure Static Web Apps CLI](https://learn.microsoft.com/azure/static-web-apps/cli) (`npm install -g @azure/static-web-apps-cli`)
-- [GitHub account](https://github.com/)
-
----
 
 ## Local Development
 
-### 1. Clone the repo and install dependencies
+### Backend (FastAPI)
 
-```bash
-git clone https://github.com/<your-username>/<your-repo>.git
-cd ai-hr-assistant-flask-poc
-python3.9 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
+1. Create and activate a Python virtual environment:
+    ```bash
+    cd api/ask
+    python3 -m venv .venv
+    source .venv/bin/activate
+    ```
+
+2. Install dependencies:
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+3. Add your API keys to a `.env` file.
+
+4. Run the FastAPI server:
+    ```bash
+    uvicorn main:app --reload
+    ```
+
+### Frontend
+
+- If static HTML/JS:
+    ```bash
+    cd frontend
+    python3 -m http.server 3000
+    ```
+- If using a framework (React, Vue, etc.):
+    ```bash
+    cd frontend
+    npm install
+    npm start
+    ```
+
+### CORS
+
+The backend uses CORS middleware to allow requests from the frontend:
+```python
+from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["https://your-frontend-url"],  # Update for production
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 ```
 
-### 2. Test the Azure Function locally
+## Containerization
 
-```bash
-func start
-```
-Test with:
-```bash
-curl -X POST http://localhost:7071/api/ask -H "Content-Type: application/json" -d '{"question": "What is the leave policy?"}'
-```
+1. Build the backend image for amd64:
+    ```bash
+    docker build --platform linux/amd64 -t <your-acr-name>.azurecr.io/ai-hr-api:v1 .
+    ```
+2. Push to Azure Container Registry:
+    ```bash
+    docker push <your-acr-name>.azurecr.io/ai-hr-api:v1
+    ```
 
-### 3. Test the frontend locally
+## Azure Deployment
 
-```bash
-cd frontend
-python3 -m http.server 5500
-```
-Visit [http://localhost:5500](http://localhost:5500).
+### Backend (Azure Container Apps)
 
-### 4. Full-stack local test with SWA CLI
+- Deploy or update your container app:
+    ```bash
+    az containerapp update \
+      --name ai-assistant-app \
+      --resource-group ai-assistant_group \
+      --image <your-acr-name>.azurecr.io/ai-hr-api:v1
+    ```
+- Ensure ingress is set to external:
+    ```bash
+    az containerapp ingress enable \
+      --name ai-assistant-app \
+      --resource-group ai-assistant_group \
+      --type external
+    ```
 
-From the project root:
-```bash
-swa start frontend --api-location ask
-```
-Visit [http://localhost:4280](http://localhost:4280).
+### Frontend (Azure Static Web Apps)
 
----
-
-## Deployment to Azure
-
-1. **Push your code to GitHub.**
-2. **Create a new Azure Static Web App** in the [Azure Portal](https://portal.azure.com/):
-   - Set **App location** to `frontend`
-   - Set **API location** to `ask`
-3. **Azure will create a GitHub Actions workflow** for CI/CD.
-4. **Monitor deployment** in the GitHub Actions tab.
-5. **Access your app** via the provided Azure Static Web App URL.
-
----
+- Deploy your frontend folder as a Static Web App via the Azure Portal or GitHub Actions.
+- Update your frontend code to use the public URL of your backend container app.
 
 ## Troubleshooting
 
-- **API not working?**  
-  - Check folder structure and `function.json` in `ask/`
-  - Review GitHub Actions logs for deployment errors
-  - Ensure Node.js version is 18.x for local development
-
-- **Frontend not connecting to API?**  
-  - Make sure API is deployed and accessible at `/api/ask`
-  - Check browser console/network tab for errors
+- **CORS errors:** Ensure backend CORS settings allow your frontend’s domain.
+- **404 or unavailable:** Make sure the container app is running and ingress is external.
+- **Architecture errors:** Always build Docker images for `linux/amd64` for Azure.
 
 ---
 
-## License
-
-MIT
-
----
-
-## Credits
-
-- [LangChain](https://github.com/langchain-ai/langchain)
-- [FAISS](https://github.com/facebookresearch/faiss)
+**Contact:**  
+For further help, open an issue or contact the project maintainer.
