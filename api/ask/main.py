@@ -6,7 +6,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # or ["*"] for all origins (dev only)
+    allow_origins=["https://gray-island-097a3500f.6.azurestaticapps.net"],  # or ["*"] for all origins (dev only)
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
