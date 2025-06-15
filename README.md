@@ -1,4 +1,4 @@
-# AI Assistant - Azure Deployment
+# AI HR Assistant - Azure Deployment
 
 ## Project Structure
 
@@ -17,6 +17,11 @@ ai-hr-assistant-flask-poc/
     ├── index.html                 # Main frontend entrypoint
     ├── ...                        # Other frontend assets and code
 ```
+
+## Live Web App
+
+**Frontend URL:**  
+[https://gray-island-097a3500f.6.azurestaticapps.net/](https://gray-island-097a3500f.6.azurestaticapps.net/)
 
 ## Local Development
 
@@ -63,7 +68,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://your-frontend-url"],  # Update for production
+    allow_origins=["https://gray-island-097a3500f.6.azurestaticapps.net"],  # Update for production
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
