@@ -4,7 +4,7 @@ from langchain.chat_models import AzureChatOpenAI
 from azure.ai.contentsafety import ContentSafetyClient
 from azure.ai.contentsafety.models import AnalyzeTextOptions
 from azure.core.credentials import AzureKeyCredential as CSKeyCredential
-from shared.embeddings import retrieve_relevant_docs
+from .embeddings import retrieve_relevant_docs
 
 load_dotenv()
 

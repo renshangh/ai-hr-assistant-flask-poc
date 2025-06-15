@@ -2,7 +2,7 @@ import logging
 import azure.functions as func
 import json
 
-from shared.langchain_logic import get_hr_answer  # Make sure this import matches your function
+from .langchain_logic import get_hr_answer  # Make sure this import matches your function
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
