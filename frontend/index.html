@@ -131,7 +131,7 @@
 
             // Call Azure Function API endpoint
             try {
-                const response = await fetch('https://ai-assistant-app.politerock-221b4c25.eastus2.azurecontainerapps.io/ask', {
+                const response = await fetch('http://localhost:8000/ask', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ question })
