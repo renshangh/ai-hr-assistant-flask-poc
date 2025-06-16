@@ -16,9 +16,12 @@ documents = [
 texts = [doc["text"] for doc in documents]
 doc_embeddings = embedding_model.encode(texts)
 
+# Create a FAISS index for efficient similarity search
 dimension = doc_embeddings.shape[1]
 index = faiss.IndexFlatL2(dimension)
 index.add(np.array(doc_embeddings))
+
+# Function to retrieve relevant documents based on a question
 
 def retrieve_relevant_docs(question, k=3):
     question_embedding = embedding_model.encode([question])
