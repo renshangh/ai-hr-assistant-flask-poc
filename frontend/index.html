@@ -131,7 +131,7 @@
 
             // Call Azure Function API endpoint
             try {
-                const response = await fetch('https://gray-island-097a3500f.6.azurestaticapps.net/ask', {
+                const response = await fetch('http://localhost:8000/ask', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ question })
