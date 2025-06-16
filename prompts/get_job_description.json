@@ -1,0 +1,5 @@
+{
+  "prompt_name": "get_job_description",
+  "description": "Prompt to generate a job description.",
+  "prompt_text": "Write a job description for a {job_title} at {company_name} with the following responsibilities: {responsibilities}. The ideal candidate should have {qualifications}."
+}
