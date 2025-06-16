@@ -1,4 +1,4 @@
-# AI HR Assistant - Azure Deployment
+# AI Assistant - Azure Deployment
 
 ## Project Structure
 
